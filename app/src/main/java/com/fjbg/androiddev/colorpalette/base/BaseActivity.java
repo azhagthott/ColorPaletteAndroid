@@ -51,12 +51,9 @@ public class BaseActivity extends AppCompatActivity {
             refColorName.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataColorName) {
-
-                    ColorPalette colorName = dataColorName.getValue(ColorPalette.class);
-                    Log.d(LOG_TAG, "colorName: " + colorName);
-                    Log.d(LOG_TAG, "colorName: " + colorName.getColorHex());
-                    Log.d(LOG_TAG, "colorName: " + colorName.getColorName());
-
+                    for (DataSnapshot colorName : dataColorName.getChildren()) {
+                        listColorName.add(colorName.getValue().toString());
+                    }
                 }
 
                 @Override
@@ -69,8 +66,8 @@ public class BaseActivity extends AppCompatActivity {
             refColorHex.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(final DataSnapshot dataColorHex) {
-                    for (int i = 0; i <dataColorHex.getChildrenCount() ; i++) {
-                        listColorHex.add(dataColorHex.getValue().toString());
+                    for (DataSnapshot colorHex : dataColorHex.getChildren()) {
+                        listColorHex.add(colorHex.getValue().toString());
                     }
                 }
 
@@ -81,14 +78,17 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
 
-
-            Log.d(LOG_TAG, "listColorName: " + listColorName.get(0));
-            Log.d(LOG_TAG, "listColorHex: " + listColorHex.get(0));
-
-
         } catch (Exception e) {
             FirebaseCrash.log("ERROR:::" + e);
             Log.d(LOG_TAG, "ERROR::: " + e);
+        }
+
+        for (int i = 0; i < listColorHex.size(); i++) {
+            colors=  new ColorPalette(listColorName.get(i), listColorHex.get(i));
+
+            Log.d(LOG_TAG, "color name::: " + colors.getColorName());
+
+            list.add(colors);
         }
 
         return list;
