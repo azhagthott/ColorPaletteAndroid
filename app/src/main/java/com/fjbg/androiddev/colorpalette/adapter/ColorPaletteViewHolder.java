@@ -17,12 +17,12 @@ public class ColorPaletteViewHolder extends RecyclerView.ViewHolder{
     public TextView cvTextColorName;
     public TextView cvTextColorHex;
     public ImageView cvImageView;
-    public CardView cv;
+    public CardView card;
 
     public ColorPaletteViewHolder(final View view) {
         super(view);
 
-        cv = (CardView) view;
+        card = (CardView) view;
         cvImageView =(ImageView) view.findViewById(R.id.cvImageView);
         cvTextColorName =(TextView) view.findViewById(R.id.cvTextColorName);
         cvTextColorHex =(TextView) view.findViewById(R.id.cvTextColorHex);

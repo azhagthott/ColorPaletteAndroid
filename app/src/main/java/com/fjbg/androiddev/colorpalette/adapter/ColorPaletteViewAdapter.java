@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.fjbg.androiddev.colorpalette.R;
 import com.fjbg.androiddev.colorpalette.app.ColorPalette;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,14 @@ public class ColorPaletteViewAdapter extends RecyclerView.Adapter<ColorPaletteVi
 
     @Override
     public void onBindViewHolder(ColorPaletteViewHolder holder, int position) {
+
+        ColorPalette colors = items.get(position);
+        context = holder.cvImageView.getContext();
+
+        Picasso.with(context).load(colors.getColorImage()).into(holder.cvImageView);
+
+        holder.cvTextColorName.setText(colors.getColorName());
+        holder.cvTextColorHex.setText(colors.getColorHex());
 
     }
 
