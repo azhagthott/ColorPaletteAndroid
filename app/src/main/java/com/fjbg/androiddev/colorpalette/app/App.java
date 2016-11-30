@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.fjbg.androiddev.colorpalette.base.BaseActivity.LOG_TAG;
@@ -30,30 +31,57 @@ public class App extends Application {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         getListColor500();
-
-        //SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
     }
 
-    public List<ColorPalette> getListColor500() {
+    public static List<ColorPalette> getListColor500() {
 
-        List<ColorPalette> list = new ArrayList<>();
+        final List<ColorPalette> list = new ArrayList<>();
+        final List<String> listColorName = new ArrayList<>();
+        final List<String> listColorHex = new ArrayList<>();
 
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference("material_color");
+        try {
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(LOG_TAG, "dataSnapshot: " + dataSnapshot.child("2").child("color_500").getValue());
+            FirebaseDatabase db = FirebaseDatabase.getInstance();
+            DatabaseReference refColorHex = db.getReference("material_color").child("2").child("color_500");
+            DatabaseReference refColorName = db.getReference("material_color").child("3").child("color_name");
 
-            }
+            refColorName.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataColorName) {
+                    for (DataSnapshot colorName : dataColorName.getChildren()) {
+                        listColorName.add(colorName.getValue().toString());
+                        Log.d(LOG_TAG, "colorName: " + colorName.getValue());
+                    }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                FirebaseCrash.log("ERROR:::" + databaseError);
-                Log.d(LOG_TAG, "ERROR::: " + databaseError);
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    FirebaseCrash.log("ERROR:::" + databaseError);
+                    Log.d(LOG_TAG, "ERROR::: " + databaseError);
+                }
+            });
+
+            refColorHex.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(final DataSnapshot dataColorHex) {
+                    for (DataSnapshot colorHex : dataColorHex.getChildren()) {
+                        listColorHex.add(colorHex.getValue().toString());
+                        Log.d(LOG_TAG, "colorHex: " + colorHex.getValue());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    FirebaseCrash.log("ERROR:::" + databaseError);
+                    Log.d(LOG_TAG, "ERROR::: " + databaseError);
+                }
+            });
+
+        } catch (Exception e) {
+            FirebaseCrash.log("ERROR:::" + e);
+            Log.d(LOG_TAG, "ERROR::: " + e);
+        }
+
 
         return list;
     }

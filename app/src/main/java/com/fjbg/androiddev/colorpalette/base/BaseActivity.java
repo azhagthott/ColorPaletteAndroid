@@ -1,6 +1,8 @@
 package com.fjbg.androiddev.colorpalette.base;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -14,7 +16,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by francisco on 28-11-16.
@@ -31,66 +35,11 @@ public class BaseActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
-    public void loadingDialog(String loadingText) {
-
+    public AlertDialog loadingDialog(String message, Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message);
+        return builder.create();
     }
 
-    public List<ColorPalette> getListColor500() {
 
-        final List<ColorPalette> list = new ArrayList<>();
-
-        final List<String> listColorName = new ArrayList<>();
-        final List<String> listColorHex = new ArrayList<>();
-
-        try {
-
-            FirebaseDatabase db = FirebaseDatabase.getInstance();
-            DatabaseReference refColorHex = db.getReference("material_color").child("2").child("color_500");
-            DatabaseReference refColorName = db.getReference("material_color").child("3").child("color_name");
-
-            refColorName.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataColorName) {
-                    for (DataSnapshot colorName : dataColorName.getChildren()) {
-                        listColorName.add(colorName.getValue().toString());
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    FirebaseCrash.log("ERROR:::" + databaseError);
-                    Log.d(LOG_TAG, "ERROR::: " + databaseError);
-                }
-            });
-
-            refColorHex.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(final DataSnapshot dataColorHex) {
-                    for (DataSnapshot colorHex : dataColorHex.getChildren()) {
-                        listColorHex.add(colorHex.getValue().toString());
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    FirebaseCrash.log("ERROR:::" + databaseError);
-                    Log.d(LOG_TAG, "ERROR::: " + databaseError);
-                }
-            });
-
-        } catch (Exception e) {
-            FirebaseCrash.log("ERROR:::" + e);
-            Log.d(LOG_TAG, "ERROR::: " + e);
-        }
-
-        for (int i = 0; i < listColorHex.size(); i++) {
-            colors=  new ColorPalette(listColorName.get(i), listColorHex.get(i));
-
-            Log.d(LOG_TAG, "color name::: " + colors.getColorName());
-
-            list.add(colors);
-        }
-
-        return list;
-    }
 }
