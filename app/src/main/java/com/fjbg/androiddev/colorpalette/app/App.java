@@ -5,6 +5,7 @@ package com.fjbg.androiddev.colorpalette.app;
  */
 
 import android.app.Application;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -28,61 +29,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        getListColor500();
-    }
-
-    public static List<ColorPalette> getListColor500() {
-
-        final List<ColorPalette> list = new ArrayList<>();
-        final List<String> listColorName = new ArrayList<>();
-        final List<String> listColorHex = new ArrayList<>();
-
-        try {
-
-            FirebaseDatabase db = FirebaseDatabase.getInstance();
-            DatabaseReference refColorHex = db.getReference("material_color").child("2").child("color_500");
-            DatabaseReference refColorName = db.getReference("material_color").child("3").child("color_name");
-
-            refColorName.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataColorName) {
-                    for (DataSnapshot colorName : dataColorName.getChildren()) {
-                        listColorName.add(colorName.getValue().toString());
-                        Log.d(LOG_TAG, "colorName: " + colorName.getValue());
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    FirebaseCrash.log("ERROR:::" + databaseError);
-                    Log.d(LOG_TAG, "ERROR::: " + databaseError);
-                }
-            });
-
-            refColorHex.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(final DataSnapshot dataColorHex) {
-                    for (DataSnapshot colorHex : dataColorHex.getChildren()) {
-                        listColorHex.add(colorHex.getValue().toString());
-                        Log.d(LOG_TAG, "colorHex: " + colorHex.getValue());
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    FirebaseCrash.log("ERROR:::" + databaseError);
-                    Log.d(LOG_TAG, "ERROR::: " + databaseError);
-                }
-            });
-
-        } catch (Exception e) {
-            FirebaseCrash.log("ERROR:::" + e);
-            Log.d(LOG_TAG, "ERROR::: " + e);
-        }
-
-
-        return list;
     }
 }

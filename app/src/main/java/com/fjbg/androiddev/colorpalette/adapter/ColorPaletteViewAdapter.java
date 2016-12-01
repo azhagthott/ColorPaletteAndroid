@@ -1,6 +1,7 @@
 package com.fjbg.androiddev.colorpalette.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class ColorPaletteViewAdapter extends RecyclerView.Adapter<ColorPaletteVi
 
         holder.cvTextColorName.setText(colors.getColorName());
         holder.cvTextColorHex.setText(colors.getColorHex());
-
+        holder.card.setCardBackgroundColor(Color.parseColor(colors.getColorHex()));
     }
 
     @Override

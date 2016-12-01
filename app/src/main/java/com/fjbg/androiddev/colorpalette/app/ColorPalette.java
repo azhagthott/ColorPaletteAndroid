@@ -11,7 +11,7 @@ public class ColorPalette {
 
     private String colorName;
     private String colorHex;
-    private int colorImage;
+    private String colorImage;
 
     public ColorPalette() {
     }
@@ -21,6 +21,11 @@ public class ColorPalette {
         this.colorHex = colorHex;
     }
 
+    public ColorPalette(String colorName, String colorHex, String colorImage) {
+        this.colorName = colorName;
+        this.colorHex = colorHex;
+        this.colorImage = colorImage;
+    }
 
     public String getColorName() {
         return colorName;
@@ -38,11 +43,11 @@ public class ColorPalette {
         this.colorHex = colorHex;
     }
 
-    public int getColorImage() {
+    public String getColorImage() {
         return colorImage;
     }
 
-    public void setColorImage(int colorImage) {
+    public void setColorImage(String colorImage) {
         this.colorImage = colorImage;
     }
 }
