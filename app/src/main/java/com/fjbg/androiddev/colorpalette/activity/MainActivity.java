@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,7 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -43,10 +41,6 @@ public class MainActivity extends BaseActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         refColor = FirebaseDatabase.getInstance().getReference("material_color").child("5").child("color_name_500");
-
-        refImage = FirebaseStorage.getInstance().getReference().child("preview");
-        Log.d(LOG_TAG, "refImage: " + refImage);
-
         refColor.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -65,10 +59,11 @@ public class MainActivity extends BaseActivity {
         List<ColorPalette> colors = new ArrayList<>();
         for (DataSnapshot color : dataSnapshot.getChildren()) {
 
-            String ref = refImage + "/" + color.getKey() + ".png";
-            Log.d(LOG_TAG, "ref: " + ref);
-
-            colors.add(new ColorPalette(color.getKey().toLowerCase(), color.getValue().toString(), ref));
+            colors.add(new ColorPalette(
+                    color.child("name").getValue().toString(),
+                    color.child("hex").getValue().toString(),
+                    color.child("url_image").getValue().toString())
+            );
         }
         recyclerView.setAdapter(new ColorPaletteViewAdapter(colors));
     }
