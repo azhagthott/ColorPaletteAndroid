@@ -10,6 +10,17 @@ public class ColorPalette {
     private String colorHex;
     private String colorImage;
 
+    public ColorPalette() {
+    }
+
+    public ColorPalette(String colorHex) {
+        this.colorHex = colorHex;
+    }
+
+    public ColorPalette(String colorName, String colorHex) {
+        this.colorName = colorName;
+        this.colorHex = colorHex;
+    }
 
     public ColorPalette(String colorName, String colorHex, String colorImage) {
         this.colorName = colorName;
